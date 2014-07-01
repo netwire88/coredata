@@ -22,12 +22,14 @@ class ViewController: UIViewController {
         var request = NSFetchRequest(entityName: "Users")  //creates request
         request.returnsObjectsAsFaults = false  //don't get obj back until it's cast to managedObject
         
+        request.predicate = NSPredicate(format: "username like %@", usernameTextField.text)
+        
         var results:NSArray = context.executeFetchRequest(request, error: nil)   //executes request
         
         if (results.count > 0) {
-            for result in results {
-                println(result)
-            }
+            var result = results[0]  as NSManagedObject
+            usernameTextField.text = result.valueForKey("username") as String
+            passwordTextField.text = result.valueForKey("password") as String
         } else {
             println("0 results returned...")
         }
